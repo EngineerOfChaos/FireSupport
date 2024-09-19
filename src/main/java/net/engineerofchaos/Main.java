@@ -1,6 +1,7 @@
 package net.engineerofchaos;
 
 import net.engineerofchaos.proxy.CommonProxy;
+import net.engineerofchaos.util.handlers.RegistryHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -34,7 +35,7 @@ public class Main {
 	// Initialisation events
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-
+		RegistryHandler.preInitRegistries();
 		LOGGER.info("PreInit Event");
 	}
 	public void init(FMLInitializationEvent event) {
