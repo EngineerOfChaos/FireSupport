@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 public class EntityInit {
     public static void registerEntities() {
         registerEntity("heli", EntityHeli.class, Reference.ENTITY_HELI, 50, 10240, 0);
-        registerEntity("big_heli", EntityBigHeli.class, Reference.ENTITY_BIG_HELI, 50, 3126738, 0);
+        registerEntity("big_heli", EntityBigHeli.class, Reference.ENTITY_BIG_HELI, 120, 3126738, 0);
     }
 
     private static void registerEntity(String name, Class <? extends Entity> entity, int id, int range, int colour1, int colour2) {

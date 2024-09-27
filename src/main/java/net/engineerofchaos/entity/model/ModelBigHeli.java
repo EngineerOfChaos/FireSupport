@@ -40,20 +40,20 @@ public class ModelBigHeli extends ModelBase {
 	private final ModelRenderer plane_r3;
 	private final ModelRenderer plane_r4;
 	private final ModelRenderer plane_r5;
-	private final ModelRenderer blades;
-	private final ModelRenderer cube_r13;
-	private final ModelRenderer cube_r14;
-	private final ModelRenderer cube_r15;
-	private final ModelRenderer cube_r16;
-	private final ModelRenderer cube_r17;
+//	private final ModelRenderer blades;
+//	private final ModelRenderer cube_r13;
+//	private final ModelRenderer cube_r14;
+//	private final ModelRenderer cube_r15;
+//	private final ModelRenderer cube_r16;
+//	private final ModelRenderer cube_r17;
 	private final ModelRenderer tail_rotor;
 	private final ModelRenderer cube_r18;
 	private final ModelRenderer cube_r19;
 	private final ModelRenderer cube_r20;
-	private final ModelRenderer tail_blades;
-	private final ModelRenderer cube_r21;
-	private final ModelRenderer cube_r22;
-	private final ModelRenderer cube_r23;
+//	private final ModelRenderer tail_blades;
+//	private final ModelRenderer cube_r21;
+//	private final ModelRenderer cube_r22;
+//	private final ModelRenderer cube_r23;
 	private final ModelRenderer tail_planes;
 	private final ModelRenderer cube_r24;
 	private final ModelRenderer cube_r25;
@@ -284,40 +284,40 @@ public class ModelBigHeli extends ModelBase {
 		setRotationAngle(plane_r5, 0.0F, -1.0472F, 0.0F);
 		plane_r5.cubeList.add(new ModelBox(plane_r5, 0, 0, -12.5F, 1.0F, 4.0F, 24, 0, 57, 0.0F, false));
 
-		blades = new ModelRenderer(this);
-		blades.setRotationPoint(0.0F, 0.0F, 0.0F);
-		rotor.addChild(blades);
-		blades.cubeList.add(new ModelBox(blades, 63, 51, -2.25F, -27.5F, 11.0F, 3, 1, 48, 0.0F, false));
-
-		cube_r13 = new ModelRenderer(this);
-		cube_r13.setRotationPoint(0.0F, -27.5F, 0.0F);
-		blades.addChild(cube_r13);
-		setRotationAngle(cube_r13, 0.0F, 1.0472F, 0.0F);
-		cube_r13.cubeList.add(new ModelBox(cube_r13, 63, 51, -2.25F, 0.0F, 11.0F, 3, 1, 48, 0.0F, false));
-
-		cube_r14 = new ModelRenderer(this);
-		cube_r14.setRotationPoint(0.0F, -27.5F, 0.0F);
-		blades.addChild(cube_r14);
-		setRotationAngle(cube_r14, 0.0F, 2.0944F, 0.0F);
-		cube_r14.cubeList.add(new ModelBox(cube_r14, 63, 51, -2.25F, 0.0F, 11.0F, 3, 1, 48, 0.0F, false));
-
-		cube_r15 = new ModelRenderer(this);
-		cube_r15.setRotationPoint(0.0F, -27.5F, 0.0F);
-		blades.addChild(cube_r15);
-		setRotationAngle(cube_r15, 0.0F, 3.1416F, 0.0F);
-		cube_r15.cubeList.add(new ModelBox(cube_r15, 63, 51, -2.25F, 0.0F, 11.0F, 3, 1, 48, 0.0F, false));
-
-		cube_r16 = new ModelRenderer(this);
-		cube_r16.setRotationPoint(0.0F, -27.5F, 0.0F);
-		blades.addChild(cube_r16);
-		setRotationAngle(cube_r16, 0.0F, -2.0944F, 0.0F);
-		cube_r16.cubeList.add(new ModelBox(cube_r16, 63, 51, -2.25F, 0.0F, 11.0F, 3, 1, 48, 0.0F, false));
-
-		cube_r17 = new ModelRenderer(this);
-		cube_r17.setRotationPoint(0.0F, -27.5F, 0.0F);
-		blades.addChild(cube_r17);
-		setRotationAngle(cube_r17, 0.0F, -1.0472F, 0.0F);
-		cube_r17.cubeList.add(new ModelBox(cube_r17, 63, 51, -2.25F, 0.0F, 11.0F, 3, 1, 48, 0.0F, false));
+//		blades = new ModelRenderer(this);
+//		blades.setRotationPoint(0.0F, 0.0F, 0.0F);
+//		rotor.addChild(blades);
+//		blades.cubeList.add(new ModelBox(blades, 63, 51, -2.25F, -27.5F, 11.0F, 3, 1, 48, 0.0F, false));
+//
+//		cube_r13 = new ModelRenderer(this);
+//		cube_r13.setRotationPoint(0.0F, -27.5F, 0.0F);
+//		blades.addChild(cube_r13);
+//		setRotationAngle(cube_r13, 0.0F, 1.0472F, 0.0F);
+//		cube_r13.cubeList.add(new ModelBox(cube_r13, 63, 51, -2.25F, 0.0F, 11.0F, 3, 1, 48, 0.0F, false));
+//
+//		cube_r14 = new ModelRenderer(this);
+//		cube_r14.setRotationPoint(0.0F, -27.5F, 0.0F);
+//		blades.addChild(cube_r14);
+//		setRotationAngle(cube_r14, 0.0F, 2.0944F, 0.0F);
+//		cube_r14.cubeList.add(new ModelBox(cube_r14, 63, 51, -2.25F, 0.0F, 11.0F, 3, 1, 48, 0.0F, false));
+//
+//		cube_r15 = new ModelRenderer(this);
+//		cube_r15.setRotationPoint(0.0F, -27.5F, 0.0F);
+//		blades.addChild(cube_r15);
+//		setRotationAngle(cube_r15, 0.0F, 3.1416F, 0.0F);
+//		cube_r15.cubeList.add(new ModelBox(cube_r15, 63, 51, -2.25F, 0.0F, 11.0F, 3, 1, 48, 0.0F, false));
+//
+//		cube_r16 = new ModelRenderer(this);
+//		cube_r16.setRotationPoint(0.0F, -27.5F, 0.0F);
+//		blades.addChild(cube_r16);
+//		setRotationAngle(cube_r16, 0.0F, -2.0944F, 0.0F);
+//		cube_r16.cubeList.add(new ModelBox(cube_r16, 63, 51, -2.25F, 0.0F, 11.0F, 3, 1, 48, 0.0F, false));
+//
+//		cube_r17 = new ModelRenderer(this);
+//		cube_r17.setRotationPoint(0.0F, -27.5F, 0.0F);
+//		blades.addChild(cube_r17);
+//		setRotationAngle(cube_r17, 0.0F, -1.0472F, 0.0F);
+//		cube_r17.cubeList.add(new ModelBox(cube_r17, 63, 51, -2.25F, 0.0F, 11.0F, 3, 1, 48, 0.0F, false));
 
 		tail_rotor = new ModelRenderer(this);
 		tail_rotor.setRotationPoint(6.0F, -9.0F, 77.0F);
@@ -343,28 +343,28 @@ public class ModelBigHeli extends ModelBase {
 		setRotationAngle(cube_r20, -1.5708F, 0.0F, 0.0F);
 		cube_r20.cubeList.add(new ModelBox(cube_r20, 0, 21, -1.0F, -1.0F, -7.5F, 2, 2, 6, 0.0F, false));
 
-		tail_blades = new ModelRenderer(this);
-		tail_blades.setRotationPoint(0.0F, 0.0F, 0.0F);
-		tail_rotor.addChild(tail_blades);
-		tail_blades.cubeList.add(new ModelBox(tail_blades, 28, 195, 5.5F, -2.25F, -14.5F, 1, 3, 10, 0.0F, false));
-
-		cube_r21 = new ModelRenderer(this);
-		cube_r21.setRotationPoint(5.5F, 0.0F, 0.0F);
-		tail_blades.addChild(cube_r21);
-		setRotationAngle(cube_r21, 1.5708F, 0.0F, 0.0F);
-		cube_r21.cubeList.add(new ModelBox(cube_r21, 28, 195, 0.0F, -2.25F, -14.5F, 1, 3, 10, 0.0F, false));
-
-		cube_r22 = new ModelRenderer(this);
-		cube_r22.setRotationPoint(5.5F, 0.0F, 0.0F);
-		tail_blades.addChild(cube_r22);
-		setRotationAngle(cube_r22, 3.1416F, 0.0F, 0.0F);
-		cube_r22.cubeList.add(new ModelBox(cube_r22, 28, 195, 0.0F, -2.25F, -14.5F, 1, 3, 10, 0.0F, false));
-
-		cube_r23 = new ModelRenderer(this);
-		cube_r23.setRotationPoint(5.5F, 0.0F, 0.0F);
-		tail_blades.addChild(cube_r23);
-		setRotationAngle(cube_r23, -1.5708F, 0.0F, 0.0F);
-		cube_r23.cubeList.add(new ModelBox(cube_r23, 28, 195, 0.0F, -2.25F, -14.5F, 1, 3, 10, 0.0F, false));
+//		tail_blades = new ModelRenderer(this);
+//		tail_blades.setRotationPoint(0.0F, 0.0F, 0.0F);
+//		tail_rotor.addChild(tail_blades);
+//		tail_blades.cubeList.add(new ModelBox(tail_blades, 28, 195, 5.5F, -2.25F, -14.5F, 1, 3, 10, 0.0F, false));
+//
+//		cube_r21 = new ModelRenderer(this);
+//		cube_r21.setRotationPoint(5.5F, 0.0F, 0.0F);
+//		tail_blades.addChild(cube_r21);
+//		setRotationAngle(cube_r21, 1.5708F, 0.0F, 0.0F);
+//		cube_r21.cubeList.add(new ModelBox(cube_r21, 28, 195, 0.0F, -2.25F, -14.5F, 1, 3, 10, 0.0F, false));
+//
+//		cube_r22 = new ModelRenderer(this);
+//		cube_r22.setRotationPoint(5.5F, 0.0F, 0.0F);
+//		tail_blades.addChild(cube_r22);
+//		setRotationAngle(cube_r22, 3.1416F, 0.0F, 0.0F);
+//		cube_r22.cubeList.add(new ModelBox(cube_r22, 28, 195, 0.0F, -2.25F, -14.5F, 1, 3, 10, 0.0F, false));
+//
+//		cube_r23 = new ModelRenderer(this);
+//		cube_r23.setRotationPoint(5.5F, 0.0F, 0.0F);
+//		tail_blades.addChild(cube_r23);
+//		setRotationAngle(cube_r23, -1.5708F, 0.0F, 0.0F);
+//		cube_r23.cubeList.add(new ModelBox(cube_r23, 28, 195, 0.0F, -2.25F, -14.5F, 1, 3, 10, 0.0F, false));
 
 		tail_planes = new ModelRenderer(this);
 		tail_planes.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -391,15 +391,16 @@ public class ModelBigHeli extends ModelBase {
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		engines.render(f5);
-		dorsal_fin.render(f5);
-		wings.render(f5);
-		body.render(f5);
-		nose.render(f5);
-		tail_fin.render(f5);
-		rotor.render(f5);
-		tail_rotor.render(f5);
+	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		engines.render(scale);
+		dorsal_fin.render(scale);
+		wings.render(scale);
+		body.render(scale);
+		nose.render(scale);
+		tail_fin.render(scale);
+		rotor.render(scale);
+		tail_rotor.render(scale);
+		setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
@@ -411,9 +412,9 @@ public class ModelBigHeli extends ModelBase {
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		//super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-		float ageInSeconds = ageInTicks/20;
-		float rotationAngle = (ageInSeconds * 2.0f * (float) Math.PI) % (2 * (float) Math.PI);
-		this.rotor.rotateAngleY = rotationAngle;
-		this.tail_rotor.rotateAngleX = rotationAngle;
+//		float ageInSeconds = ageInTicks/20;
+//		float rotationAngle = (ageInSeconds * 2.0f * (float) Math.PI) % (2 * (float) Math.PI);
+//		this.rotor.rotateAngleY = rotationAngle;
+//		this.tail_rotor.rotateAngleX = rotationAngle;
 	}
 }
