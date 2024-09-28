@@ -4,11 +4,12 @@ package net.engineerofchaos.entity.model;// Made with Blockbench 4.10.4
 
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelBigHeli extends ModelBase {
+public class ModelBigHeli extends ModelBiped {
 	private final ModelRenderer engines;
 	private final ModelRenderer cube_r1;
 	private final ModelRenderer cube_r2;
@@ -400,7 +401,7 @@ public class ModelBigHeli extends ModelBase {
 		tail_fin.render(scale);
 		rotor.render(scale);
 		tail_rotor.render(scale);
-		setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
+		this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
@@ -412,9 +413,9 @@ public class ModelBigHeli extends ModelBase {
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		//super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-//		float ageInSeconds = ageInTicks/20;
-//		float rotationAngle = (ageInSeconds * 2.0f * (float) Math.PI) % (2 * (float) Math.PI);
-//		this.rotor.rotateAngleY = rotationAngle;
-//		this.tail_rotor.rotateAngleX = rotationAngle;
+		float ageInSeconds = ageInTicks/20;
+		float rotationAngle = (ageInSeconds * 2.0f * (float) Math.PI) % (2 * (float) Math.PI);
+		this.rotor.rotateAngleY = rotationAngle;
+		this.tail_rotor.rotateAngleX = rotationAngle;
 	}
 }

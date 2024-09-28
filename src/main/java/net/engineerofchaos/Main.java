@@ -36,6 +36,7 @@ public class Main {
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		RegistryHandler.preInitRegistries();
+		proxy.preInit();
 		LOGGER.info("PreInit Event");
 	}
 	public void init(FMLInitializationEvent event) {

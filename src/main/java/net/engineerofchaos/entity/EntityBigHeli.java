@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class EntityBigHeli extends EntityCow {
+public class EntityBigHeli extends EntityGhast {
     //private final EntityBodyHelper bodyHelper;
 
     public EntityBigHeli(World worldIn) {
@@ -34,14 +34,14 @@ public class EntityBigHeli extends EntityCow {
 //        return null;
 //    }
 
-    @Override
-    protected void entityInit() {
-        super.entityInit();
-    }
+//    @Override
+//    protected void entityInit() {
+//        super.entityInit();
+//    }
 
-    protected void initEntityAI() {
-        this.tasks.addTask(1, new EntityAIWanderAvoidWater(this, 1.0F, 200));
-    }
+//    protected void initEntityAI() {
+//        this.tasks.addTask(1, new EntityAIWanderAvoidWater(this, 1.0F, 200));
+//    }
 
     protected void applyEntityAttributes(){
         super.applyEntityAttributes();

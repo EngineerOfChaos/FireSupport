@@ -16,6 +16,6 @@ public class EntityInit {
 
     private static void registerEntity(String name, Class <? extends Entity> entity, int id, int range, int colour1, int colour2) {
         EntityRegistry.registerModEntity(new ResourceLocation(Main.MODID + ":" + name), entity, name, id,
-                Main.instance, range, 1, true, colour1, colour2);
+                Main.instance, range, 2, true, colour1, colour2);
     }
 }
