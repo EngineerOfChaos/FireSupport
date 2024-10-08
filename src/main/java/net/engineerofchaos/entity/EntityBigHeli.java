@@ -3,6 +3,7 @@ package net.engineerofchaos.entity;
 import net.engineerofchaos.entity.ai.HelicopterAI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,20 +16,21 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
+import javax.xml.crypto.Data;
+
 public class EntityBigHeli extends EntityLiving {
-    // 0 = full speed, 1 = spin down, 2 = stationary, 3 = spin up
-    private static final DataParameter<Integer> ROTOR_STATE = EntityDataManager.createKey(EntityBigHeli.class, DataSerializers.VARINT);
     private static final DataParameter<Float> ROTOR_SPEED = EntityDataManager.createKey(EntityBigHeli.class, DataSerializers.FLOAT);
-    private static final DataParameter<Float> ROTOR_ANGLE = EntityDataManager.createKey(EntityBigHeli.class, DataSerializers.FLOAT);
     private static final DataParameter<BlockPos> LANDING_LOCATION = EntityDataManager.createKey(EntityBigHeli.class, DataSerializers.BLOCK_POS);
     // 0 = flying, 1 = landing, 2 = on ground, 3 = taking off
     private static final DataParameter<Integer> ACTION = EntityDataManager.createKey(EntityBigHeli.class, DataSerializers.VARINT);
 
-    private int rotorSpinTimer = 300;
-    private int rotorSpinCounter = 0;
-
     private float lastBladeAngle;
     private float bladeAngle;
+
+    private float lastYaw;
+    private float newYaw;
+    private float delta;
+    private float targetYaw;
 
     public EntityBigHeli(World worldIn) {
         super(worldIn);
@@ -40,8 +42,11 @@ public class EntityBigHeli extends EntityLiving {
     public void onUpdate() {
         super.onUpdate();
 
+        //this.renderYawOffset = this.rotationYaw;
+
         EntityPlayer nearestPlayer = this.world.<EntityPlayer>getClosestPlayerToEntity(this, 100);
 
+        // -------- Blade angle maths --------
         this.lastBladeAngle = this.bladeAngle;
         this.bladeAngle += 0.05F * getRotorSpeed() * ((float) Math.PI / 30F);
         if (this.bladeAngle >= 2 * Math.PI) {
@@ -49,12 +54,42 @@ public class EntityBigHeli extends EntityLiving {
             this.lastBladeAngle -= (2F * (float) Math.PI);
         }
 
+        // -------- Yaw angle maths --------
+        //this.lastYaw = getYaw();
+        this.lastYaw = this.newYaw;
+        this.targetYaw = -((float) MathHelper.atan2(this.motionX, this.motionZ)) * (180F / (float) Math.PI);
+        //if (nearestPlayer != null) {nearestPlayer.sendMessage(new TextComponentString("Raw values: targetYaw: " + targetYaw + ", lastYaw: " + lastYaw));}
+
+        delta = getDelta(lastYaw, targetYaw);
+        //if (nearestPlayer != null) {nearestPlayer.sendMessage(new TextComponentString("unclamped delta: " + delta));}
+
+        if (Math.abs(delta) <= 5) {
+            newYaw = targetYaw;
+        } else if (delta > 5) {
+            newYaw = lastYaw + 5;
+            delta = 5;
+        } else if (delta < 5){
+            newYaw = lastYaw - 5;
+            delta = -5;
+        }
+
+        if (newYaw >= 180) {
+            newYaw -= 360;
+            lastYaw -= 360;
+        } else if (newYaw < -180 ) {
+            newYaw += 360;
+            lastYaw += 360;
+        }
+
+
         if (!world.isRemote) {
 
             if (nearestPlayer != null) {
                 //nearestPlayer.sendMessage(new TextComponentString("Action: " + getCurrentAction() + ", RotorSpeed: " + getRotorSpeed()));
                 //nearestPlayer.sendMessage(new TextComponentString("Blade angle (entity side): " + bladeAngle));
                 //nearestPlayer.sendMessage(new TextComponentString("Blade angle (entity side, function w/ no partial): " + getBladeAngle(0)));
+                //nearestPlayer.sendMessage(new TextComponentString("After wrapping: lastYaw: " + lastYaw + ", targetYaw: " + targetYaw));
+                //nearestPlayer.sendMessage(new TextComponentString("clamped delta: " + delta));
                 if (nearestPlayer.getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.STICK && getCurrentAction() == 0) {
                     setAction(1);
                 }
@@ -64,33 +99,14 @@ public class EntityBigHeli extends EntityLiving {
                 setRotorSpeed(Math.max(0, getRotorSpeed() - 0.5F));
             }
 
-
-
-//            setRotorAngle(getRotorAngle() + getRotorSpeed() * 0.005F);
-//            setRotorAngle(getRotorAngle() % (2 * (float) Math.PI));
-
-
-//            if (getCurrentAction() == 2 && getRotorState() == 0) {
-//                //nearestPlayer.sendMessage(new TextComponentString("Landed and rotor spinning: initiating spin down"));
-//                setRotorState(1);
-//            }
-//
-//            if (getRotorState() == 0 || getRotorState() == 2) {
-//                rotorSpinCounter = 0;
-//            } else {
-//                rotorSpinCounter += 1;
-//            }
-//
-//            if (rotorSpinCounter >= rotorSpinTimer) {
-//                //nearestPlayer.sendMessage(new TextComponentString("Spin down complete, stopping rotors"));
-//                setRotorState(2);
-//                rotorSpinCounter = 0;
-//            }
         }
     }
 
     public float getBladeAngle(float partialTickTime) {
         return lastBladeAngle + (bladeAngle - lastBladeAngle) * partialTickTime;
+    }
+    public float getRenderYaw(float partialTicks) {
+        return this.lastYaw + (this.delta) * partialTicks;
     }
 
     public void fall(float distance, float damageMultiplier)
@@ -104,17 +120,15 @@ public class EntityBigHeli extends EntityLiving {
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(ROTOR_STATE, 0);
         this.dataManager.register(ROTOR_SPEED, 200F);
         this.dataManager.register(LANDING_LOCATION, new BlockPos(0, 0, 0));
         this.dataManager.register(ACTION, 0);
-        this.dataManager.register(ROTOR_ANGLE, 0.0F);
     }
 
     protected void initEntityAI() {
         this.tasks.addTask(1, new HelicopterAI.AILandAtCoords(this));
         this.tasks.addTask(2, new HelicopterAI.AIRandomFly(this));
-        this.tasks.addTask(3, new HelicopterAI.AILookAround(this));
+        //this.tasks.addTask(3, new HelicopterAI.AILookAround(this));
     }
 
     protected void applyEntityAttributes(){
@@ -133,13 +147,14 @@ public class EntityBigHeli extends EntityLiving {
 
     }
 
-    // Rotor State Data
-    public int getRotorState() {
-        return this.dataManager.get(ROTOR_STATE);
-    }
-    public void setRotorState(int state) {
-        this.dataManager.set(ROTOR_STATE, state);
-    }
+
+
+//    public float getPrevYaw() {
+//        return this.dataManager.get(PREV_YAW);
+//    }
+//    public void setPrevYaw(float yaw) {
+//        this.dataManager.set(PREV_YAW, yaw);
+//    }
 
     // Rotor Speed Data
     public float getRotorSpeed() {
@@ -147,13 +162,6 @@ public class EntityBigHeli extends EntityLiving {
     }
     public void setRotorSpeed(float speed) {
         this.dataManager.set(ROTOR_SPEED, speed);
-    }
-    // Rotor Angle Data
-    public float getRotorAngle() {
-        return this.dataManager.get(ROTOR_ANGLE);
-    }
-    public void setRotorAngle(float angle) {
-        this.dataManager.set(ROTOR_ANGLE, angle);
     }
 
     // Action Data
@@ -217,7 +225,7 @@ public class EntityBigHeli extends EntityLiving {
             this.motionY *= (double)f;
             this.motionZ *= (double)f;
 
-            if (getRotorState() != 0) {
+            if (getRotorSpeed() != 200) {
                 this.motionY -= 0.02D;
             }
         }
@@ -234,5 +242,39 @@ public class EntityBigHeli extends EntityLiving {
 
         this.limbSwingAmount += (f2 - this.limbSwingAmount) * 0.4F;
         this.limbSwing += this.limbSwingAmount;
+    }
+
+    // bodyHelper supposedly fixes issue but doesn't
+
+//    protected EntityBodyHelper createBodyHelper()
+//    {
+//        return new EntityBigHeli.BodyHelper(this);
+//    }
+
+    class BodyHelper extends EntityBodyHelper
+    {
+        public BodyHelper(EntityLivingBase theEntity)
+        {
+            super(theEntity);
+        }
+
+        public void updateRenderAngles()
+        {
+        }
+    }
+
+//    // Seems to interface with renderYawOffset, don't know why
+//    @Override
+//    protected float updateDistance(float f1, float f2) {
+//        return f2;
+//    }
+    private float getDelta(float a, float b) {
+        float y = (b - a);
+        if (y < -180) {
+            y += 360;
+        } else if (y > 180) {
+            y -= 360;
+        }
+        return y;
     }
 }

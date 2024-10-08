@@ -13,7 +13,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -53,6 +55,14 @@ public class RenderBigHeli extends RenderLiving<EntityBigHeli> {
 
     @Override
     protected void applyRotations(EntityBigHeli entityLiving, float ageInTicks, float rotationYaw, float partialTicks) {
-        super.applyRotations(entityLiving, ageInTicks, rotationYaw, partialTicks);
+        EntityPlayer nearestPlayer = entityLiving.world.<EntityPlayer>getClosestPlayerToEntity(entityLiving, 100);
+        if (nearestPlayer != null) {
+            //nearestPlayer.sendMessage(new TextComponentString("Rendering: partialTicks = " + partialTicks));
+        }
+
+        // Call GLStatemanager.rotate() before super.applyRotations() for global rotations
+        super.applyRotations(entityLiving, ageInTicks, entityLiving.getRenderYaw(partialTicks), partialTicks);
+        // Call GLStatemanager.rotate() after super.applyRotations() for local rotations
+        GlStateManager.rotate(-20F, 1F, 0, 0);
     }
 }

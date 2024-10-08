@@ -11,6 +11,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.Objects;
 import java.util.Random;
@@ -87,10 +88,13 @@ public class HelicopterAI {
 
         public void updateTask()
         {
+            EntityPlayer nearestPlayer = this.parentEntity.world.<EntityPlayer>getClosestPlayerToEntity(parentEntity, 100);
+
             if (parentEntity.getCurrentAction() == 0) {
                 if (this.parentEntity.getAttackTarget() == null) {
-                    this.parentEntity.rotationYaw = -((float) MathHelper.atan2(this.parentEntity.motionX, this.parentEntity.motionZ)) * (180F / (float) Math.PI);
-                    this.parentEntity.renderYawOffset = this.parentEntity.rotationYaw;
+//                    this.parentEntity.rotationYaw = -((float) MathHelper.atan2(this.parentEntity.motionX, this.parentEntity.motionZ)) * (180F / (float) Math.PI);
+//                    this.parentEntity.renderYawOffset = this.parentEntity.rotationYaw;
+
                 } else {
                     EntityLivingBase entitylivingbase = this.parentEntity.getAttackTarget();
                     double d0 = 64.0D;
@@ -105,6 +109,7 @@ public class HelicopterAI {
             } else {
                 this.parentEntity.rotationYaw = 0;
                 this.parentEntity.renderYawOffset = 0;
+
             }
         }
     }
