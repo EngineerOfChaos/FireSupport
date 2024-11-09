@@ -1,8 +1,8 @@
-package net.engineerofchaos.entity.layers;
+package net.engineerofchaos.firesupport.entity.layers;
 
-import net.engineerofchaos.entity.EntityBigHeli;
-import net.engineerofchaos.entity.model.ModelStallionRotors;
-import net.engineerofchaos.entity.render.RenderBigHeli;
+import net.engineerofchaos.firesupport.entity.EntityBigHeli;
+import net.engineerofchaos.firesupport.entity.model.ModelStallionRotors;
+import net.engineerofchaos.firesupport.entity.render.RenderBigHeli;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

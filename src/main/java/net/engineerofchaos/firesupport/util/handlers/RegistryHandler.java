@@ -1,6 +1,6 @@
-package net.engineerofchaos.util.handlers;
+package net.engineerofchaos.firesupport.util.handlers;
 
-import net.engineerofchaos.init.EntityInit;
+import net.engineerofchaos.firesupport.init.EntityInit;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber

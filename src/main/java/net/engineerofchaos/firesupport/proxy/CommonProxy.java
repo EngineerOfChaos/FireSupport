@@ -1,4 +1,4 @@
-package net.engineerofchaos.proxy;
+package net.engineerofchaos.firesupport.proxy;
 
 public class CommonProxy {
     public void preInit() {

@@ -1,9 +1,9 @@
-package net.engineerofchaos.util.handlers;
+package net.engineerofchaos.firesupport.util.handlers;
 
-import net.engineerofchaos.entity.EntityBigHeli;
-import net.engineerofchaos.entity.EntityHeli;
-import net.engineerofchaos.entity.render.RenderBigHeli;
-import net.engineerofchaos.entity.render.RenderHeli;
+import net.engineerofchaos.firesupport.entity.EntityBigHeli;
+import net.engineerofchaos.firesupport.entity.EntityHeli;
+import net.engineerofchaos.firesupport.entity.render.RenderBigHeli;
+import net.engineerofchaos.firesupport.entity.render.RenderHeli;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.fml.client.registry.IRenderFactory;

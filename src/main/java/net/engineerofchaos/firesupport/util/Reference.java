@@ -1,4 +1,4 @@
-package net.engineerofchaos.util;
+package net.engineerofchaos.firesupport.util;
 
 public class Reference {
     public static final int ENTITY_HELI = 700;

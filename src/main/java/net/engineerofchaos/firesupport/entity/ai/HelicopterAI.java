@@ -1,19 +1,15 @@
-package net.engineerofchaos.entity.ai;
+package net.engineerofchaos.firesupport.entity.ai;
 
-import net.engineerofchaos.entity.EntityBigHeli;
+import net.engineerofchaos.firesupport.entity.EntityBigHeli;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
 
-import java.util.Objects;
 import java.util.Random;
 
 public class HelicopterAI {

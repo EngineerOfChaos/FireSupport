@@ -1,8 +1,8 @@
-package net.engineerofchaos.entity.render;
+package net.engineerofchaos.firesupport.entity.render;
 
-import net.engineerofchaos.Main;
-import net.engineerofchaos.entity.EntityHeli;
-import net.engineerofchaos.entity.model.ModelHeli;
+import net.engineerofchaos.firesupport.Main;
+import net.engineerofchaos.firesupport.entity.EntityHeli;
+import net.engineerofchaos.firesupport.entity.model.ModelHeli;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;

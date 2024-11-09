@@ -1,29 +1,21 @@
-package net.engineerofchaos.entity.render;
+package net.engineerofchaos.firesupport.entity.render;
 
-import net.engineerofchaos.Main;
-import net.engineerofchaos.entity.EntityBigHeli;
-import net.engineerofchaos.entity.EntityHeli;
-import net.engineerofchaos.entity.layers.LayerStallionBlades;
-import net.engineerofchaos.entity.layers.LayerStallionRotors;
-import net.engineerofchaos.entity.model.ModelBigHeli;
-import net.engineerofchaos.entity.model.ModelHeli;
-import net.engineerofchaos.entity.model.ModelStallionBase;
+import net.engineerofchaos.firesupport.Main;
+import net.engineerofchaos.firesupport.entity.EntityBigHeli;
+import net.engineerofchaos.firesupport.entity.layers.LayerStallionBlades;
+import net.engineerofchaos.firesupport.entity.layers.LayerStallionRotors;
+import net.engineerofchaos.firesupport.entity.model.ModelBigHeli;
+import net.engineerofchaos.firesupport.entity.model.ModelStallionBase;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
-
-import static net.minecraft.client.renderer.OpenGlHelper.glBlendFunc;
-import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
 public class RenderBigHeli extends RenderLiving<EntityBigHeli> {
@@ -63,6 +55,6 @@ public class RenderBigHeli extends RenderLiving<EntityBigHeli> {
         // Call GLStatemanager.rotate() before super.applyRotations() for global rotations
         super.applyRotations(entityLiving, ageInTicks, entityLiving.getRenderYaw(partialTicks), partialTicks);
         // Call GLStatemanager.rotate() after super.applyRotations() for local rotations
-        GlStateManager.rotate(-20F, 1F, 0, 0);
+        GlStateManager.rotate(0F, 1F, 0, 0);
     }
 }

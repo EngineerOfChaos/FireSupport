@@ -1,9 +1,9 @@
-package net.engineerofchaos.init;
+package net.engineerofchaos.firesupport.init;
 
-import net.engineerofchaos.Main;
-import net.engineerofchaos.entity.EntityBigHeli;
-import net.engineerofchaos.entity.EntityHeli;
-import net.engineerofchaos.util.Reference;
+import net.engineerofchaos.firesupport.Main;
+import net.engineerofchaos.firesupport.entity.EntityBigHeli;
+import net.engineerofchaos.firesupport.entity.EntityHeli;
+import net.engineerofchaos.firesupport.util.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;

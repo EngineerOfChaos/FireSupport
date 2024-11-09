@@ -1,9 +1,8 @@
-package net.engineerofchaos.entity;
+package net.engineerofchaos.firesupport.entity;
 
-import net.engineerofchaos.entity.ai.HelicopterAI;
+import net.engineerofchaos.firesupport.entity.ai.HelicopterAI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,10 +12,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-
-import javax.xml.crypto.Data;
 
 public class EntityBigHeli extends EntityLiving {
     private static final DataParameter<Float> ROTOR_SPEED = EntityDataManager.createKey(EntityBigHeli.class, DataSerializers.FLOAT);

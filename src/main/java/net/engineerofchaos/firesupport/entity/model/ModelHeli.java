@@ -1,4 +1,4 @@
-package net.engineerofchaos.entity.model;// Made with Blockbench 4.10.4
+package net.engineerofchaos.firesupport.entity.model;// Made with Blockbench 4.10.4
 // Exported for Minecraft version 1.7 - 1.12
 // Paste this class into your mod and generate all required imports
 

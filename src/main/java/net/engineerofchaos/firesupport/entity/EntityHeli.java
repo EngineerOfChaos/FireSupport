@@ -1,8 +1,6 @@
-package net.engineerofchaos.entity;
+package net.engineerofchaos.firesupport.entity;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;

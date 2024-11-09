@@ -1,7 +1,7 @@
-package net.engineerofchaos;
+package net.engineerofchaos.firesupport;
 
-import net.engineerofchaos.proxy.CommonProxy;
-import net.engineerofchaos.util.handlers.RegistryHandler;
+import net.engineerofchaos.firesupport.proxy.CommonProxy;
+import net.engineerofchaos.firesupport.util.handlers.RegistryHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -26,8 +26,8 @@ public class Main {
 	public static Main instance;
 
 	// Proxy setup
-	public static final String CLIENT = "net.engineerofchaos.proxy.ClientProxy";
-	public static final String COMMON = "net.engineerofchaos.proxy.CommonProxy";
+	public static final String CLIENT = "net.engineerofchaos.firesupport.proxy.ClientProxy";
+	public static final String COMMON = "net.engineerofchaos.firesupport.proxy.CommonProxy";
 
 	@SidedProxy(clientSide = CLIENT, serverSide = COMMON)
 	public static CommonProxy proxy;
