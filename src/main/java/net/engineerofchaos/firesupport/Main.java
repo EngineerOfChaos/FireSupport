@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,6 +47,10 @@ public class Main {
 	public void postInit(FMLPostInitializationEvent event) {
 
 		LOGGER.info("PostInit Event");
+	}
+	@Mod.EventHandler
+	public static void ServerInit(FMLServerStartingEvent event) {
+		RegistryHandler.serverRegistries(event);
 	}
 
 

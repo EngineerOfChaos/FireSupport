@@ -1,6 +1,8 @@
 package net.engineerofchaos.firesupport.entity;
 
-import net.engineerofchaos.firesupport.entity.ai.HelicopterAI;
+import net.engineerofchaos.firesupport.entity.ai.AIHover;
+import net.engineerofchaos.firesupport.entity.ai.AircraftMoveHelper;
+import net.engineerofchaos.firesupport.pathfinding.Waypoint;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +14,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class EntityBigHeli extends EntityLiving {
@@ -19,20 +22,35 @@ public class EntityBigHeli extends EntityLiving {
     private static final DataParameter<BlockPos> LANDING_LOCATION = EntityDataManager.createKey(EntityBigHeli.class, DataSerializers.BLOCK_POS);
     // 0 = flying, 1 = landing, 2 = on ground, 3 = taking off
     private static final DataParameter<Integer> ACTION = EntityDataManager.createKey(EntityBigHeli.class, DataSerializers.VARINT);
+    private static final DataParameter<Float> YAW_TARGET = EntityDataManager.createKey(EntityBigHeli.class, DataSerializers.FLOAT);
 
     private float lastBladeAngle;
     private float bladeAngle;
 
     private float lastYaw;
     private float newYaw;
-    private float delta;
+    private float yawDelta;
     private float targetYaw;
+
+    private float lastRoll;
+    private float newRoll;
+    private float targetRoll;
+    private float rollDelta;
+
+
+    public Waypoint nextWP;
 
     public EntityBigHeli(World worldIn) {
         super(worldIn);
         setSize(5.0f, 2.0f);
-        this.moveHelper = new HelicopterAI.HeliMoveHelper(this);
+        //this.moveHelper = new HelicopterAI.HeliMoveHelper(this);
+        this.moveHelper = new AircraftMoveHelper(this);
     }
+
+    public void setNextWP(Waypoint nextWP) {
+        this.nextWP = nextWP;
+    }
+    public void setYawTarget(float yaw) {this.dataManager.set(YAW_TARGET, yaw);}
 
     @Override
     public void onUpdate() {
@@ -41,6 +59,17 @@ public class EntityBigHeli extends EntityLiving {
         //this.renderYawOffset = this.rotationYaw;
 
         EntityPlayer nearestPlayer = this.world.<EntityPlayer>getClosestPlayerToEntity(this, 100);
+
+//        if (ticksExisted % 40 == 0) {
+//            if (nearestPlayer != null && !world.isRemote) {
+//                nearestPlayer.sendMessage(new TextComponentString("Move helper updating: " + this.getMoveHelper().isUpdating()));
+//                if (nextWP == null) {
+//                    nearestPlayer.sendMessage(new TextComponentString("No target waypoint!"));
+//                } else {
+//                    nearestPlayer.sendMessage(new TextComponentString("Target waypoint: " + nextWP.x + ", "+ nextWP.y + ", "+ nextWP.z + ", "));
+//                }
+//            }
+//        }
 
         // -------- Blade angle maths --------
         this.lastBladeAngle = this.bladeAngle;
@@ -52,21 +81,27 @@ public class EntityBigHeli extends EntityLiving {
 
         // -------- Yaw angle maths --------
         //this.lastYaw = getYaw();
-        this.lastYaw = this.newYaw;
-        this.targetYaw = -((float) MathHelper.atan2(this.motionX, this.motionZ)) * (180F / (float) Math.PI);
-        //if (nearestPlayer != null) {nearestPlayer.sendMessage(new TextComponentString("Raw values: targetYaw: " + targetYaw + ", lastYaw: " + lastYaw));}
+        //if (!world.isRemote) {
+            this.lastYaw = this.newYaw;
+            //this.targetYaw = -((float) MathHelper.atan2(this.motionX, this.motionZ)) * (180F / (float) Math.PI);
+            this.targetYaw = dataManager.get(YAW_TARGET);
+            if (nearestPlayer != null && !world.isRemote) {
+                //nearestPlayer.sendMessage(new TextComponentString("Raw values: targetYaw: " + targetYaw + ", lastYaw: " + lastYaw));
+                //nearestPlayer.sendMessage(new TextComponentString("Raw values: motionX: " + this.motionX + ", motionY: " + motionY));
+            }
+        //}
 
-        delta = getDelta(lastYaw, targetYaw);
+        yawDelta = getDelta(lastYaw, targetYaw);
         //if (nearestPlayer != null) {nearestPlayer.sendMessage(new TextComponentString("unclamped delta: " + delta));}
 
-        if (Math.abs(delta) <= 5) {
+        if (Math.abs(yawDelta) <= 5) {
             newYaw = targetYaw;
-        } else if (delta > 5) {
+        } else if (yawDelta > 5) {
             newYaw = lastYaw + 5;
-            delta = 5;
-        } else if (delta < 5){
+            yawDelta = 5;
+        } else if (yawDelta < 5){
             newYaw = lastYaw - 5;
-            delta = -5;
+            yawDelta = -5;
         }
 
         if (newYaw >= 180) {
@@ -76,6 +111,30 @@ public class EntityBigHeli extends EntityLiving {
             newYaw += 360;
             lastYaw += 360;
         }
+
+        // -------- Roll angle maths --------
+        this.lastRoll = this.newRoll;
+        if (-yawDelta > 0) {
+            targetRoll = Math.min(-yawDelta, 20);
+        } else if (-yawDelta < 0) {
+            targetRoll = Math.max(-yawDelta, -20);
+        } else {
+            targetRoll = 0;
+        }
+        this.rollDelta =  targetRoll - newRoll;
+
+        //if (nearestPlayer != null && world.isRemote && ticksExisted % 5 == 0) {nearestPlayer.sendMessage(new TextComponentString("Raw values: targetRoll: " + targetRoll + ", lastRoll: " + lastRoll));}
+
+        if (Math.abs(rollDelta) <= 1) {
+            newRoll = targetRoll;
+        } else if (rollDelta > 1) {
+            newRoll = lastRoll + 1;
+            rollDelta = 1;
+        } else if (rollDelta < 1){
+            newRoll = lastRoll - 1;
+            rollDelta = -1;
+        }
+
 
 
         if (!world.isRemote) {
@@ -102,7 +161,10 @@ public class EntityBigHeli extends EntityLiving {
         return lastBladeAngle + (bladeAngle - lastBladeAngle) * partialTickTime;
     }
     public float getRenderYaw(float partialTicks) {
-        return this.lastYaw + (this.delta) * partialTicks;
+        return this.lastYaw + (this.yawDelta) * partialTicks;
+    }
+    public float getRenderRoll(float partialTicks) {
+        return this.lastRoll + (this.rollDelta) * partialTicks;
     }
 
     public void fall(float distance, float damageMultiplier)
@@ -119,12 +181,14 @@ public class EntityBigHeli extends EntityLiving {
         this.dataManager.register(ROTOR_SPEED, 200F);
         this.dataManager.register(LANDING_LOCATION, new BlockPos(0, 0, 0));
         this.dataManager.register(ACTION, 0);
+        this.dataManager.register(YAW_TARGET, 0.0F);
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(1, new HelicopterAI.AILandAtCoords(this));
-        this.tasks.addTask(2, new HelicopterAI.AIRandomFly(this));
+        //this.tasks.addTask(1, new HelicopterAI.AILandAtCoords(this));
+        //this.tasks.addTask(2, new HelicopterAI.AIRandomFly(this));
         //this.tasks.addTask(3, new HelicopterAI.AILookAround(this));
+        this.tasks.addTask(1, new AIHover(this));
     }
 
     protected void applyEntityAttributes(){

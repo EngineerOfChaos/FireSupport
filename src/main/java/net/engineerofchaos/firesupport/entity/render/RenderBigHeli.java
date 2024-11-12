@@ -55,6 +55,6 @@ public class RenderBigHeli extends RenderLiving<EntityBigHeli> {
         // Call GLStatemanager.rotate() before super.applyRotations() for global rotations
         super.applyRotations(entityLiving, ageInTicks, entityLiving.getRenderYaw(partialTicks), partialTicks);
         // Call GLStatemanager.rotate() after super.applyRotations() for local rotations
-        GlStateManager.rotate(0F, 1F, 0, 0);
+        GlStateManager.rotate(entityLiving.getRenderRoll(partialTicks), 0, 0, 1F);
     }
 }
