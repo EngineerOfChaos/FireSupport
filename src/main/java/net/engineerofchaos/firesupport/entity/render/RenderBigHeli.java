@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -53,7 +54,28 @@ public class RenderBigHeli extends RenderLiving<EntityBigHeli> {
         }
 
         // Call GLStatemanager.rotate() before super.applyRotations() for global rotations
-        super.applyRotations(entityLiving, ageInTicks, entityLiving.getRenderYaw(partialTicks), partialTicks);
+        //super.applyRotations(entityLiving, ageInTicks, entityLiving.getRenderYaw(partialTicks), partialTicks);
+
+        GlStateManager.rotate(180.0F - entityLiving.getRenderYaw(partialTicks), 0.0F, 1.0F, 0.0F);
+
+        // get random direction to turn on crash
+
+
+        if (entityLiving.deathTime > 0)
+        {
+            float x = entityLiving.crashDirection.x;
+            float z = entityLiving.crashDirection.y;
+            float f = ((float)entityLiving.deathTime + partialTicks - 1.0F) / 20.0F * 0.1F; // * 1.6
+            f = MathHelper.sqrt(f);
+
+            if (f > 1.0F)
+            {
+                f = 1.0F;
+            }
+
+            GlStateManager.rotate(f * this.getDeathMaxRotation(entityLiving), x, 0.0F, z);
+        }
+
         // Call GLStatemanager.rotate() after super.applyRotations() for local rotations
         GlStateManager.rotate(entityLiving.getRenderRoll(partialTicks), 0, 0, 1F);
     }

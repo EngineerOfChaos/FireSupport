@@ -20,14 +20,6 @@ public class AIHover extends EntityAIBase {
         // Must be flying
         if (this.parentEntity.getCurrentAction() != 0) { return false; }
 
-        EntityMoveHelper entitymovehelper = this.parentEntity.getMoveHelper();
-
-//        if (!entitymovehelper.isUpdating())
-//        {
-//            // If move helper is waiting, execute
-//            return true;
-//        }
-
         Waypoint target = this.parentEntity.nextWP;
         if (target == null) {
             return false;
