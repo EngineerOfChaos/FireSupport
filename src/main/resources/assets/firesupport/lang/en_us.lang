@@ -1,1 +1,6 @@
+# Items
+item.bullet.name=Bullet
+
+# Entities
 entity.big_heli.name=Big Heli
+entity.bullet.name=Bullet

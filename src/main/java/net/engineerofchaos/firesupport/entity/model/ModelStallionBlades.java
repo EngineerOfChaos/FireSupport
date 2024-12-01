@@ -45,8 +45,8 @@ public class ModelStallionBlades extends ModelBase {
 	private float lastRenderAge = 0.0F;
 
 	public ModelStallionBlades() {
-		textureWidth = 512;
-		textureHeight = 512;
+		this.textureWidth = 512;
+		this.textureHeight = 512;
 
 		rotor = new ModelRenderer(this);
 		rotor.setRotationPoint(0.0F, 24.0F, 0.0F);

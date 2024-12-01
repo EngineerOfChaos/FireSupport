@@ -40,12 +40,13 @@ public class Main {
 		proxy.preInit();
 		LOGGER.info("PreInit Event");
 	}
+	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-
+		proxy.init();
 		LOGGER.info("Init Event");
 	}
+	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-
 		LOGGER.info("PostInit Event");
 	}
 	@Mod.EventHandler

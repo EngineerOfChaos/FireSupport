@@ -16,8 +16,8 @@ public class ModelHeli extends ModelBase {
 	private final ModelRenderer stab_vertical_r1;
 
 	public ModelHeli() {
-		textureWidth = 64;
-		textureHeight = 64;
+		this.textureWidth = 64;
+		this.textureHeight = 64;
 
 		bb_main = new ModelRenderer(this);
 		bb_main.setRotationPoint(0.0F, 24.0F, 0.0F);

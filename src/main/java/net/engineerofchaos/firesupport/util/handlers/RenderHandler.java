@@ -10,18 +10,11 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class RenderHandler {
+
+    // MIGRATE TO PROXY AND REMOVE
+
+
     public static void registerEntityRenderers() {
-        RenderingRegistry.registerEntityRenderingHandler(EntityHeli.class, new IRenderFactory<EntityHeli>() {
-            @Override
-            public Render<? super EntityHeli> createRenderFor(RenderManager manager) {
-                return new RenderHeli(manager);
-            }
-        });
-        RenderingRegistry.registerEntityRenderingHandler(EntityBigHeli.class, new IRenderFactory<EntityBigHeli>() {
-            @Override
-            public Render<? super EntityBigHeli> createRenderFor(RenderManager manager) {
-                return new RenderBigHeli(manager);
-            }
-        });
+
     }
 }

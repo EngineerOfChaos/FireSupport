@@ -24,8 +24,8 @@ public class ModelStallionBase extends ModelBase {
 	private final ModelRenderer cube_r6;
 
 	public ModelStallionBase() {
-		textureWidth = 512;
-		textureHeight = 512;
+		this.textureWidth = 512;
+		this.textureHeight = 512;
 
 		engines = new ModelRenderer(this);
 		engines.setRotationPoint(0.0F, 24.0F, -3.0F);

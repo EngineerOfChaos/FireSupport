@@ -15,9 +15,9 @@ public class FlightPath {
             ++i;
         }
         if (i >= 1) {
-            int dx = waypoint.x - waypoints[i-1].x;
-            int dy = waypoint.y - waypoints[i-1].y;
-            int dz = waypoint.z - waypoints[i-1].z;
+            float dx = waypoint.x - waypoints[i-1].x;
+            float dy = waypoint.y - waypoints[i-1].y;
+            float dz = waypoint.z - waypoints[i-1].z;
             waypoint.distanceFromLast = (float) Math.sqrt((dx*dx) + (dy*dy) + (dz*dz));
             waypoint.yawAtLast = waypoints[i-1].requiredYaw;
         }
@@ -32,8 +32,8 @@ public class FlightPath {
         ++counter;
     }
 
-    public List<Integer> outputWaypoints() {
-        List<Integer> out = new ArrayList<Integer>();
+    public List<Float> outputWaypoints() {
+        List<Float> out = new ArrayList<Float>();
         int i = 0;
         while (waypoints[i] != null) {
             out.add(waypoints[i].x);

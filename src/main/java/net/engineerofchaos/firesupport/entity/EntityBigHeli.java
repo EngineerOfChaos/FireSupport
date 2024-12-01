@@ -1,7 +1,6 @@
 package net.engineerofchaos.firesupport.entity;
 
-import net.engineerofchaos.firesupport.entity.ai.AIFollowTestPath;
-import net.engineerofchaos.firesupport.entity.ai.AIHover;
+import net.engineerofchaos.firesupport.entity.ai.AIFollowPlayer;
 import net.engineerofchaos.firesupport.entity.ai.AircraftMoveHelper;
 import net.engineerofchaos.firesupport.pathfinding.FlightPath;
 import net.engineerofchaos.firesupport.pathfinding.Waypoint;
@@ -61,9 +60,14 @@ public class EntityBigHeli extends EntityLiving {
         this.moveHelper = new AircraftMoveHelper(this);
     }
 
+    protected void despawnEntity() {
+        // Put airspace integration here!
+    }
+
     public void setNextWP(Waypoint nextWP) {
-        this.nextWP = nextWP;
-        this.currentPath = null;
+        this.nextWP = null;
+        this.currentPath = new FlightPath();
+        this.currentPath.addWaypoint(nextWP);
     }
     public void setYawTarget(float yaw) {this.dataManager.set(YAW_TARGET, yaw);}
     public void setRollTarget(float yaw) {this.dataManager.set(ROLL_TARGET, yaw);}
@@ -87,51 +91,55 @@ public class EntityBigHeli extends EntityLiving {
 //            }
 //        }
 
-        // Action stored flight path if available
-        if (currentPath != null) {
-            this.nextWP = currentPath.getTarget();
-            List<Integer> dump = currentPath.outputWaypoints();
-        }
-        if (nearestPlayer != null){
-            //nearestPlayer.sendMessage(new TextComponentString(dump.toString()));
-            //nearestPlayer.sendMessage(new TextComponentString(target.x + ", " + target.y + ", " + target.z));
-            //nearestPlayer.sendMessage(new TextComponentString("" + flightPath.counter));
-        }
-        if (this.nextWP != null) {
-            this.getMoveHelper().setMoveTo(this.nextWP.x, this.nextWP.y, this.nextWP.z, 1);
-            double d0 = this.nextWP.x - this.posX;
-            double d1 = this.nextWP.y - this.posY;
-            double d2 = this.nextWP.z - this.posZ;
-            float dTotal = (float) Math.sqrt((d0*d0) + (d1*d1) + (d2*d2));
-            if (nearestPlayer != null) {
-                //nearestPlayer.sendMessage(new TextComponentString("deltas: " + d0 + ", " + d1 + ", " + d2));
-            }
-            if (!this.nextWP.strictYaw) {
-                this.setYawTarget(-((float) MathHelper.atan2(d0, d2)) * (180F / (float) Math.PI));
-            } else {
-                if (this.nextWP.distanceFromLast != 0) {
-                    this.setYawTarget(this.nextWP.yawAtLast + getDelta(this.nextWP.yawAtLast, this.nextWP.requiredYaw) * (1 - (dTotal/this.nextWP.distanceFromLast)));
-                } else {
-                    this.setYawTarget(this.nextWP.requiredYaw);
+        // Action stored flight path if available (server side only)
+        if (!world.isRemote) {
+            if (currentPath != null) {
+                this.nextWP = currentPath.getTarget();
+                List<Float> dump = currentPath.outputWaypoints();
+                if (nearestPlayer != null) {
+                    nearestPlayer.sendMessage(new TextComponentString(dump.toString()));
+                    //nearestPlayer.sendMessage(new TextComponentString(target.x + ", " + target.y + ", " + target.z));
+                    //nearestPlayer.sendMessage(new TextComponentString("" + flightPath.counter));
                 }
-            }
-            // If roll not required, auto determine by yaw delta
-            if (!this.nextWP.strictRoll) {
-                float yawToTarget = getDelta(newYaw, this.dataManager.get(YAW_TARGET));
-                if (-yawToTarget > 0) {
-                    targetRoll = Math.min(-yawToTarget/5, 10);
-                } else if (-yawToTarget < 0) {
-                    targetRoll = Math.max(-yawToTarget/5, -10);
-                } else {
-                    targetRoll = 0;
-                }
-                this.setRollTarget(targetRoll);
-            } else {
-                this.setRollTarget(this.nextWP.requiredRoll);
             }
 
-            if (abs(d0) < 1 && abs(d1) < 1 && abs(d2) < 1) {
-                currentPath.next();
+            if (this.nextWP != null) {
+                this.getMoveHelper().setMoveTo(this.nextWP.x, this.nextWP.y, this.nextWP.z, 1);
+                double d0 = this.nextWP.x - this.posX;
+                double d1 = this.nextWP.y - this.posY;
+                double d2 = this.nextWP.z - this.posZ;
+                float dTotal = (float) Math.sqrt((d0 * d0) + (d1 * d1) + (d2 * d2));
+                if (nearestPlayer != null) {
+                    //nearestPlayer.sendMessage(new TextComponentString("deltas: " + d0 + ", " + d1 + ", " + d2));
+                }
+
+                if (!this.nextWP.strictYaw) {
+                    this.setYawTarget(-((float) MathHelper.atan2(d0, d2)) * (180F / (float) Math.PI));
+                } else {
+                    if (this.nextWP.distanceFromLast != 0) {
+                        this.setYawTarget(this.nextWP.yawAtLast + getDelta(this.nextWP.yawAtLast, this.nextWP.requiredYaw) * (1 - (dTotal / this.nextWP.distanceFromLast)));
+                    } else {
+                        this.setYawTarget(this.nextWP.requiredYaw);
+                    }
+                }
+                // If roll not required, auto determine by yaw delta
+                if (!this.nextWP.strictRoll) {
+                    float yawToTarget = getDelta(newYaw, this.dataManager.get(YAW_TARGET));
+                    if (-yawToTarget > 0) {
+                        targetRoll = Math.min(-yawToTarget / 5, 10);
+                    } else if (-yawToTarget < 0) {
+                        targetRoll = Math.max(-yawToTarget / 5, -10);
+                    } else {
+                        targetRoll = 0;
+                    }
+                    this.setRollTarget(targetRoll);
+                } else {
+                    this.setRollTarget(this.nextWP.requiredRoll);
+                }
+
+                if (abs(d0) < 1 && abs(d1) < 1 && abs(d2) < 1) {
+                    currentPath.next();
+                }
             }
         }
 
@@ -149,9 +157,10 @@ public class EntityBigHeli extends EntityLiving {
         this.lastYaw = this.newYaw;
         //this.targetYaw = -((float) MathHelper.atan2(this.motionX, this.motionZ)) * (180F / (float) Math.PI);
         this.targetYaw = dataManager.get(YAW_TARGET);
-        if (nearestPlayer != null && !world.isRemote && ticksExisted % 3 == 0) {
+        if (nearestPlayer != null && !world.isRemote && ticksExisted % 2 == 0) {
             //nearestPlayer.sendMessage(new TextComponentString("Raw values: targetYaw: " + targetYaw + ", lastYaw: " + lastYaw));
-            //nearestPlayer.sendMessage(new TextComponentString("Raw values: motionX: " + this.motionX + ", motionY: " + motionY));
+            //nearestPlayer.sendMessage(new TextComponentString("Raw values: motionX: " + this.motionX + ", motionZ: " + motionZ));
+            //nearestPlayer.sendMessage(new TextComponentString("Pos values: posX: " + this.posX + ", posZ: " + posZ));
         }
         //}
 
@@ -247,25 +256,38 @@ public class EntityBigHeli extends EntityLiving {
         this.dataManager.register(YAW_TARGET, 0.0F);
         this.dataManager.register(ROLL_TARGET, 0.0F);
 
-        // test flight path
+        if (!world.isRemote) {
+            // test flight path
 //        this.currentPath = new FlightPath();
-//        this.currentPath.addWaypoint(new Waypoint(30, 20, 30, 30));
+//        this.currentPath.addWaypoint(new Waypoint(30, 20, 30));
 //        this.currentPath.addWaypoint(new Waypoint(30, 20, -30));
 //        this.currentPath.addWaypoint(new Waypoint(-30, 20, -30));
 //        this.currentPath.addWaypoint(new Waypoint(-30, 20, 30));
 //        this.currentPath.addWaypoint(new Waypoint(30, 20, 30));
-        // test circle path
-        this.currentPath = new FlightPath();
-        this.currentPath.addWaypoint(new Waypoint(30, 20, 0).curveStarter(0));
-        this.currentPath.addWaypoint(new Waypoint(21, 20, 21).requireRoll(-20).requireYaw(45));
-        this.currentPath.addWaypoint(new Waypoint(0, 20, 30).requireRoll(-20).requireYaw(90));
-        this.currentPath.addWaypoint(new Waypoint(-21, 20, 21).requireRoll(-20).requireYaw(135));
-        this.currentPath.addWaypoint(new Waypoint(-30, 20, 0).requireRoll(-20).requireYaw(-180));
-        this.currentPath.addWaypoint(new Waypoint(-21, 20, -21).requireRoll(-20).requireYaw(-135));
-        this.currentPath.addWaypoint(new Waypoint(0, 20, -30).requireRoll(-20).requireYaw(-90));
-        this.currentPath.addWaypoint(new Waypoint(21, 20, -21).requireRoll(-20).requireYaw(-45));
-        this.currentPath.addWaypoint(new Waypoint(30, 20, 0).requireRoll(-20).requireYaw(0));
-        this.currentPath.addWaypoint(new Waypoint(30, 20, 30));
+            // diagonal flight path
+//        this.currentPath = new FlightPath();
+//        this.currentPath.addWaypoint(new Waypoint(30, 20, 0));
+//        this.currentPath.addWaypoint(new Waypoint(0, 20, 30));
+//        this.currentPath.addWaypoint(new Waypoint(-30, 20, 0));
+//        this.currentPath.addWaypoint(new Waypoint(0, 20, -30));
+//        this.currentPath.addWaypoint(new Waypoint(30, 20, 0));
+            // test circle path
+//            this.currentPath = new FlightPath();
+//            this.currentPath.addWaypoint(new Waypoint(30, 20, 0).curveStarter(0));
+//            this.currentPath.addWaypoint(new Waypoint(21, 20, 21).requireRoll(-20).requireYaw(45));
+//            this.currentPath.addWaypoint(new Waypoint(0, 20, 30).requireRoll(-20).requireYaw(90));
+//            this.currentPath.addWaypoint(new Waypoint(-21, 20, 21).requireRoll(-20).requireYaw(135));
+//            this.currentPath.addWaypoint(new Waypoint(-30, 20, 0).requireRoll(-20).requireYaw(-180));
+//            this.currentPath.addWaypoint(new Waypoint(-21, 20, -21).requireRoll(-20).requireYaw(-135));
+//            this.currentPath.addWaypoint(new Waypoint(0, 20, -30).requireRoll(-20).requireYaw(-90));
+//            this.currentPath.addWaypoint(new Waypoint(21, 20, -21).requireRoll(-20).requireYaw(-45));
+//            this.currentPath.addWaypoint(new Waypoint(30, 20, 0).requireRoll(-20).requireYaw(0));
+//            this.currentPath.addWaypoint(new Waypoint(30, 20, 30));
+            // flick testing
+//        this.currentPath = new FlightPath();
+//        this.currentPath.addWaypoint(new Waypoint(0, 20, 0));
+//        this.currentPath.addWaypoint(new Waypoint(20, 20, -1));
+        }
     }
 
     protected void initEntityAI() {
@@ -273,7 +295,7 @@ public class EntityBigHeli extends EntityLiving {
         //this.tasks.addTask(2, new HelicopterAI.AIRandomFly(this));
         //this.tasks.addTask(3, new HelicopterAI.AILookAround(this));
 
-        //this.tasks.addTask(1, new AIHover(this));
+        this.tasks.addTask(1, new AIFollowPlayer(this, 40, 40));
         //this.tasks.addTask(1, new AIFollowTestPath(this));
     }
 
@@ -371,7 +393,8 @@ public class EntityBigHeli extends EntityLiving {
 
             float f1 = 0.16277136F / (f * f * f);
             this.moveRelative(strafe, vertical, forward, this.onGround ? 0.1F * f1 : 0.02F);
-            f = 0.91F;
+            // Was 0.91F
+            f = 0.95F;
 
             if (this.onGround)
             {
@@ -408,6 +431,71 @@ public class EntityBigHeli extends EntityLiving {
 
         this.limbSwingAmount += (f2 - this.limbSwingAmount) * 0.4F;
         this.limbSwing += this.limbSwingAmount;
+    }
+
+    public void onLivingUpdate() {
+        if (this.newPosRotationIncrements > 0 && !this.canPassengerSteer())
+        {
+            double d0 = this.posX + (this.interpTargetX - this.posX) / (double)this.newPosRotationIncrements;
+            double d1 = this.posY + (this.interpTargetY - this.posY) / (double)this.newPosRotationIncrements;
+            double d2 = this.posZ + (this.interpTargetZ - this.posZ) / (double)this.newPosRotationIncrements;
+            double d3 = MathHelper.wrapDegrees(this.interpTargetYaw - (double)this.rotationYaw);
+            this.rotationYaw = (float)((double)this.rotationYaw + d3 / (double)this.newPosRotationIncrements);
+            this.rotationPitch = (float)((double)this.rotationPitch + (this.interpTargetPitch - (double)this.rotationPitch) / (double)this.newPosRotationIncrements);
+            --this.newPosRotationIncrements;
+            this.setPosition(d0, d1, d2);
+            this.setRotation(this.rotationYaw, this.rotationPitch);
+        }
+        else if (!this.isServerWorld())
+        {
+            this.motionX *= 0.98D;
+            this.motionY *= 0.98D;
+            this.motionZ *= 0.98D;
+        }
+        // values decreased from 0.003
+        if (Math.abs(this.motionX) < 0.0003D)
+        {
+            this.motionX = 0.0D;
+        }
+
+        if (Math.abs(this.motionY) < 0.0003D)
+        {
+            this.motionY = 0.0D;
+        }
+
+        if (Math.abs(this.motionZ) < 0.0003D)
+        {
+            this.motionZ = 0.0D;
+        }
+
+        this.world.profiler.startSection("ai");
+
+        if (this.isMovementBlocked())
+        {
+            this.isJumping = false;
+            this.moveStrafing = 0.0F;
+            this.moveForward = 0.0F;
+            this.randomYawVelocity = 0.0F;
+        }
+        else if (this.isServerWorld())
+        {
+            this.world.profiler.startSection("newAi");
+            this.updateEntityActionState();
+            this.world.profiler.endSection();
+        }
+
+        this.world.profiler.endSection();
+        this.world.profiler.startSection("jump");
+        this.world.profiler.endSection();
+        this.world.profiler.startSection("travel");
+        this.moveStrafing *= 0.98F;
+        this.moveForward *= 0.98F;
+        this.randomYawVelocity *= 0.9F;
+        this.travel(this.moveStrafing, this.moveVertical, this.moveForward);
+        this.world.profiler.endSection();
+        this.world.profiler.startSection("push");
+        this.collideWithNearbyEntities();
+        this.world.profiler.endSection();
     }
 
     // bodyHelper supposedly fixes issue but doesn't

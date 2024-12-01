@@ -7,6 +7,8 @@ import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 
+import static java.lang.Math.abs;
+
 public class AircraftMoveHelper extends EntityMoveHelper {
     private final EntityLiving parentEntity;
     public boolean stopping = false;
@@ -54,9 +56,13 @@ public class AircraftMoveHelper extends EntityMoveHelper {
                     }
                     this.action = Action.WAIT;
                 } else {
-                    this.parentEntity.motionX += dx / dtotal * totalSpeed * 0.1;
-                    this.parentEntity.motionY += dy / dtotal * totalSpeed * 0.1;
-                    this.parentEntity.motionZ += dz / dtotal * totalSpeed * 0.1;
+                    this.parentEntity.motionX += dx / dtotal * totalSpeed * 0.05;
+                    this.parentEntity.motionY += dy / dtotal * totalSpeed * 0.05;
+                    this.parentEntity.motionZ += dz / dtotal * totalSpeed * 0.05;
+//                    this.parentEntity.motionX += dx / dtotal * totalSpeed * 0.1;
+//                    this.parentEntity.motionY += dy / dtotal * totalSpeed * 0.1;
+//                    this.parentEntity.motionZ += dz / dtotal * totalSpeed * 0.1;
+                    this.action = Action.WAIT;
                 }
             }
             else

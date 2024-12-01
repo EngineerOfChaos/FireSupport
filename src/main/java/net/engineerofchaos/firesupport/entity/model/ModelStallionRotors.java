@@ -39,8 +39,8 @@ public class ModelStallionRotors extends ModelBase {
 	private final ModelRenderer cube_r20;
 
 	public ModelStallionRotors() {
-		textureWidth = 512;
-		textureHeight = 512;
+		this.textureWidth = 512;
+		this.textureHeight = 512;
 
 		rotor = new ModelRenderer(this);
 		rotor.setRotationPoint(0.0F, 24.0F, 0.0F);

@@ -3,9 +3,9 @@ package net.engineerofchaos.firesupport.pathfinding;
 import javax.annotation.Nullable;
 
 public class Waypoint {
-    public final int x;
-    public final int y;
-    public final int z;
+    public final float x;
+    public final float y;
+    public final float z;
     public boolean strictYaw = false;
     public float requiredYaw;
     public boolean strictRoll = false;
@@ -13,14 +13,14 @@ public class Waypoint {
     public float distanceFromLast;
     public float yawAtLast;
 
-    public Waypoint(int x, int y, int z) {
+    public Waypoint(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
 
     }
 
-    public Waypoint(int x, int y, int z, float roll) {
+    public Waypoint(float x, float y, float z, float roll) {
         this.x = x;
         this.y = y;
         this.z = z;

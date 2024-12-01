@@ -56,7 +56,7 @@ public class AIFollowTestPath extends EntityAIBase {
 
     public void startExecuting() {
         Waypoint target = flightPath.getTarget();
-        List<Integer> dump = flightPath.outputWaypoints();
+        List<Float> dump = flightPath.outputWaypoints();
         EntityPlayer nearestPlayer = this.parentEntity.world.getClosestPlayerToEntity(parentEntity, 100);
         if (nearestPlayer != null){
             //nearestPlayer.sendMessage(new TextComponentString(dump.toString()));
